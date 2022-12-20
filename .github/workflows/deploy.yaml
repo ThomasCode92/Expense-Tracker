@@ -1,6 +1,8 @@
 name: Deploy React App
 on:
-  push: [Deployment]
+  push:
+    branches:
+      - Deployment
 jobs:
   build:
     runs-on: ubuntu-latest
