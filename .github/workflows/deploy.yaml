@@ -1,0 +1,48 @@
+name: Deploy React App
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get Code
+        uses: actions/checkout@v3
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
+      - uses: actions/cache@v3
+        id: yarn-cache
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: yarn-deps-${{ hashFiles('**/yarn.lock') }}
+      - name: Install dependencies
+        run: yarn install
+      - name: Detect cache hit
+        if: steps.yarn-cache.outputs.cache-hit == 'true'
+        run: echo "Cache hit was detected"
+      - name: Build website
+        run: yarn run build
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-files
+          path: build
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: build-files
+          path: build
+      - name: Display structure of downloaded files
+        run: ls -R
+        working-directory: build
+      - name: Deploy to Github Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./build
