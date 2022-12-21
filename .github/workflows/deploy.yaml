@@ -18,3 +18,20 @@ jobs:
         with:
           name: build-files
           path: build
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: build-files
+          path: dist
+      - name: Display structure of downloaded files
+        run: ls -R
+        working-directory: dist
+      - name: Deploy to Github Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./build
