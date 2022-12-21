@@ -26,10 +26,10 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: build-files
-          path: dist
+          path: build
       - name: Display structure of downloaded files
         run: ls -R
-        working-directory: dist
+        working-directory: build
       - name: Deploy to Github Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
