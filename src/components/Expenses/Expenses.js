@@ -1,8 +1,8 @@
+import { useState } from 'react';
 import Card from '../UI/Card';
 import ExpensesFilter from './ExpensesFilter';
 import ExpenseItem from './ExpenseItem';
 import './Expenses.css';
-import { useState } from 'react';
 
 const Expenses = props => {
   const expenses = props.items;
@@ -21,6 +21,7 @@ const Expenses = props => {
       />
       {expenses.map(expense => (
         <ExpenseItem
+          key={expense.id}
           title={expense.title}
           amount={expense.amount}
           date={expense.date}
