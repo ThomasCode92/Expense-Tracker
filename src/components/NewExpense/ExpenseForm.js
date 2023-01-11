@@ -31,7 +31,7 @@ const ExpenseForm = props => {
 
     const expenseData = {
       title: userInput.enteredTitle,
-      amount: userInput.enteredAmount,
+      amount: parseFloat(userInput.enteredAmount),
       date: new Date(userInput.enteredDate),
     };
 
